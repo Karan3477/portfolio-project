@@ -1,0 +1,16 @@
+[build]
+  publish = "frontend/portfolio-app/dist/portfolio-app"
+  command = "cd frontend/portfolio-app && npm install && npm run build"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  command = "cd frontend/portfolio-app && npm start"
+  port = 4200
+  publish = "frontend/portfolio-app/dist/portfolio-app" 
