@@ -1,19 +1,34 @@
 services:
   - type: web
-    name: portfolio-backend
-    runtime: java
-    preBuildCommand: chmod +x build.sh
-    buildCommand: ./build.sh
-    startCommand: java -jar target/Portfolio-0.0.1-SNAPSHOT.jar
+    name: portfolio-app
+    env: docker
+    plan: starter
+    region: oregon
+    buildCommand: docker build -t portfolio-app .
+    startCommand: docker run -p $PORT:9000 portfolio-app
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: production
+        value: docker
       - key: SPRING_DATASOURCE_URL
-        sync: false
+        fromDatabase:
+          name: portfolio-db
+          property: connectionString
       - key: SPRING_DATASOURCE_USERNAME
-        sync: false
+        fromDatabase:
+          name: portfolio-db
+          property: username
       - key: SPRING_DATASOURCE_PASSWORD
-        sync: false
-      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
-        value: update
-    healthCheckPath: /api/health 
+        fromDatabase:
+          name: portfolio-db
+          property: password
+      - key: PORT
+        value: 9000
+    healthCheckPath: /actuator/health
+    autoDeploy: true
+
+databases:
+  - name: portfolio-db
+    databaseName: portfolio
+    user: portfolio_user
+    plan: starter
+    region: oregon 
