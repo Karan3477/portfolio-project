@@ -17,7 +17,7 @@ COPY frontend/portfolio-app/ ./
 RUN npm run build
 
 # Stage 2: Build Spring Boot Backend
-FROM maven:3.9.6-openjdk-17 AS backend-build
+FROM maven:3.9-eclipse-temurin-17 AS backend-build
 
 WORKDIR /app/backend
 
@@ -32,7 +32,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Stage 3: Production Runtime
-FROM openjdk:17-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 # Install necessary packages
 RUN apk add --no-cache curl
