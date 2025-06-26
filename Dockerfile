@@ -5,13 +5,13 @@ FROM node:18-alpine AS frontend-build
 WORKDIR /app/frontend
 
 # Copy package files
-COPY frontend/portfolio-app/package*.json ./
+COPY frontend/portfolio-app/ .
+
+# Increase memory for the build
+ENV NODE_OPTIONS=--max-old-space-size=4096
 
 # Install dependencies
-RUN npm ci --only=production
-
-# Copy source code
-COPY frontend/portfolio-app/ ./
+RUN npm install
 
 # Build the Angular application
 RUN npm run build
@@ -32,7 +32,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Stage 3: Production Runtime
-FROM eclipse-temurin:17-jre-alpine
+FROM docker.io/eclipse-temurin:17-jre-alpine
 
 # Install necessary packages
 RUN apk add --no-cache curl
