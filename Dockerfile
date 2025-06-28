@@ -18,8 +18,8 @@ RUN npm install
 ENV NODE_OPTIONS=--max-old-space-size=4096
 ENV NODE_ENV=production
 
-# Build the Angular application using npx to run the local Angular CLI version
-RUN npx ng build --configuration production
+# Build the Angular application using the npm build script
+RUN npm run build -- --configuration production
 
 # Stage 2: Build Spring Boot Backend
 FROM maven:3.9-eclipse-temurin-17 AS backend-build
