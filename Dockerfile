@@ -2,25 +2,28 @@
 # Stage 1: Build Angular Frontend
 FROM node:18-alpine AS frontend-build
 
+# Set working directory
 WORKDIR /app
 
-# Copy the entire frontend directory
-COPY frontend/ .
+# Debug: Show current directory
+RUN pwd && ls -la
+
+# Copy the entire project first
+COPY . .
+
+# Debug: Show what was copied
+RUN echo "=== ROOT DIRECTORY ===" && ls -la
+RUN echo "=== FRONTEND DIRECTORY ===" && ls -la frontend/
+RUN echo "=== PORTFOLIO-APP DIRECTORY ===" && ls -la frontend/portfolio-app/
 
 # Navigate to the portfolio-app directory
-WORKDIR /app/portfolio-app
+WORKDIR /app/frontend/portfolio-app
 
-# Debug: List files to see what was copied
-RUN ls -la
-
-# Debug: Show package.json content
-RUN cat package.json
+# Debug: Show we're in the right place
+RUN pwd && ls -la
 
 # Install dependencies
 RUN npm install
-
-# Debug: Check if ng is available
-RUN npx ng version
 
 # Increase memory for the build
 ENV NODE_OPTIONS=--max-old-space-size=4096
@@ -56,7 +59,7 @@ WORKDIR /app
 COPY --from=backend-build /app/backend/target/*.jar app.jar
 
 # Copy the built frontend from frontend build stage
-COPY --from=frontend-build /app/portfolio-app/dist/portfolio-app/browser ./static
+COPY --from=frontend-build /app/frontend/portfolio-app/dist/portfolio-app/browser ./static
 
 # Create a non-root user
 RUN addgroup -g 1001 -S appgroup && \
