@@ -21,16 +21,16 @@ RUN pwd && ls -la
 # Install dependencies (this will install Angular 18.2.0 as specified in package.json)
 RUN npm install
 
-# Debug: Check if Angular CLI is installed and show version
-RUN npm list @angular/cli
+# Debug: Check if Angular CLI is available locally and show version
+RUN npx ng version
 RUN echo "Available scripts:" && npm run
 
 # Increase memory for the build and set production mode
 ENV NODE_OPTIONS=--max-old-space-size=4096
 ENV NODE_ENV=production
 
-# Build the Angular application using the local Angular CLI version (18.2.0)
-RUN ./node_modules/.bin/ng build --configuration production
+# Build the Angular application using npx to run the local Angular CLI version
+RUN npx ng build --configuration production
 
 # Stage 2: Build Spring Boot Backend
 FROM maven:3.9-eclipse-temurin-17 AS backend-build
