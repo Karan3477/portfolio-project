@@ -4,14 +4,17 @@ FROM node:18-alpine AS frontend-build
 
 WORKDIR /app/frontend/portfolio-app
 
-# Copy the entire portfolio-app directory
+# Copy package files first for better caching
+COPY frontend/portfolio-app/package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the source code
 COPY frontend/portfolio-app/ .
 
 # Increase memory for the build
 ENV NODE_OPTIONS=--max-old-space-size=4096
-
-# Install dependencies
-RUN npm install
 
 # Build the Angular application
 RUN npm run build
