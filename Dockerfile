@@ -5,8 +5,14 @@ FROM node:18-alpine AS frontend-build
 # Set working directory
 WORKDIR /app/portfolio-app
 
+# Debug: Show initial directory state
+RUN pwd && ls -la
+
 # Copy package files first for layer caching
 COPY frontend/portfolio-app/package*.json ./
+
+# Debug: Show what was copied
+RUN echo "=== AFTER COPYING PACKAGE FILES ===" && pwd && ls -la
 
 # Install dependencies (this will install Angular 18.2.0 as specified in package.json)
 RUN npm install
