@@ -21,8 +21,7 @@ RUN pwd && ls -la
 # Install dependencies (this will install Angular 18.2.0 as specified in package.json)
 RUN npm install
 
-# Debug: Check if Angular CLI is available locally and show version
-RUN npx ng version
+# Show available scripts for debugging
 RUN echo "Available scripts:" && npm run
 
 # Increase memory for the build and set production mode
