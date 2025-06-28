@@ -13,8 +13,14 @@ WORKDIR /app/portfolio-app
 # Debug: List files to see what was copied
 RUN ls -la
 
+# Debug: Show package.json content
+RUN cat package.json
+
 # Install dependencies
 RUN npm install
+
+# Debug: Check if ng is available
+RUN npx ng version
 
 # Increase memory for the build
 ENV NODE_OPTIONS=--max-old-space-size=4096
