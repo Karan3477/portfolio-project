@@ -3,18 +3,15 @@
 FROM node:18-alpine AS frontend-build
 
 # Set working directory
-WORKDIR /app
-
-# Copy package files first
-COPY frontend/portfolio-app/package*.json ./portfolio-app/
-
-# Navigate to the portfolio-app directory
 WORKDIR /app/portfolio-app
 
-# Install the exact Angular CLI version from package.json
+# Copy package files first for layer caching
+COPY frontend/portfolio-app/package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the source code
+# Now copy the rest of the source code
 COPY frontend/portfolio-app/ .
 
 # Debug: Show Angular CLI version and available scripts
