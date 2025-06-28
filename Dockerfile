@@ -5,27 +5,26 @@ FROM node:18-alpine AS frontend-build
 # Set working directory
 WORKDIR /app
 
-# Copy the entire project first
-COPY . .
+# Copy package files first
+COPY frontend/portfolio-app/package*.json ./portfolio-app/
 
 # Navigate to the portfolio-app directory
-WORKDIR /app/frontend/portfolio-app
+WORKDIR /app/portfolio-app
 
-# Debug: Show we're in the right place and what's here
+# Debug: Show what we have so far
 RUN pwd && ls -la
-RUN echo "=== PACKAGE.JSON CONTENT ===" && cat package.json
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the source code
+COPY frontend/portfolio-app/ .
 
 # Install Angular CLI globally
 RUN npm install -g @angular/cli
 
-# Install project dependencies
-RUN npm install
-
 # Debug: Check if ng is available
 RUN ng version
-
-# Debug: Show available scripts
-RUN npm run
 
 # Increase memory for the build
 ENV NODE_OPTIONS=--max-old-space-size=4096
@@ -61,7 +60,7 @@ WORKDIR /app
 COPY --from=backend-build /app/backend/target/*.jar app.jar
 
 # Copy the built frontend from frontend build stage
-COPY --from=frontend-build /app/frontend/portfolio-app/dist/portfolio-app/browser ./static
+COPY --from=frontend-build /app/portfolio-app/dist/portfolio-app/browser ./static
 
 # Create a non-root user
 RUN addgroup -g 1001 -S appgroup && \
