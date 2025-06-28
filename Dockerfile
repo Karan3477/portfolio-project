@@ -5,31 +5,33 @@ FROM node:18-alpine AS frontend-build
 # Set working directory
 WORKDIR /app
 
-# Debug: Show current directory
-RUN pwd && ls -la
-
 # Copy the entire project first
 COPY . .
-
-# Debug: Show what was copied
-RUN echo "=== ROOT DIRECTORY ===" && ls -la
-RUN echo "=== FRONTEND DIRECTORY ===" && ls -la frontend/
-RUN echo "=== PORTFOLIO-APP DIRECTORY ===" && ls -la frontend/portfolio-app/
 
 # Navigate to the portfolio-app directory
 WORKDIR /app/frontend/portfolio-app
 
-# Debug: Show we're in the right place
+# Debug: Show we're in the right place and what's here
 RUN pwd && ls -la
+RUN echo "=== PACKAGE.JSON CONTENT ===" && cat package.json
 
-# Install dependencies
+# Install Angular CLI globally
+RUN npm install -g @angular/cli
+
+# Install project dependencies
 RUN npm install
+
+# Debug: Check if ng is available
+RUN ng version
+
+# Debug: Show available scripts
+RUN npm run
 
 # Increase memory for the build
 ENV NODE_OPTIONS=--max-old-space-size=4096
 
-# Build the Angular application
-RUN npm run build
+# Build the Angular application using npx
+RUN npx ng build
 
 # Stage 2: Build Spring Boot Backend
 FROM maven:3.9-eclipse-temurin-17 AS backend-build
