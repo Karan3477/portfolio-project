@@ -11,26 +11,22 @@ COPY frontend/portfolio-app/package*.json ./portfolio-app/
 # Navigate to the portfolio-app directory
 WORKDIR /app/portfolio-app
 
-# Debug: Show what we have so far
-RUN pwd && ls -la
-
-# Install dependencies
+# Install the exact Angular CLI version from package.json
 RUN npm install
 
 # Copy the rest of the source code
 COPY frontend/portfolio-app/ .
 
-# Install Angular CLI globally
-RUN npm install -g @angular/cli
+# Debug: Show Angular CLI version and available scripts
+RUN npx ng version
+RUN npm run
 
-# Debug: Check if ng is available
-RUN ng version
-
-# Increase memory for the build
+# Increase memory for the build and set production mode
 ENV NODE_OPTIONS=--max-old-space-size=4096
+ENV NODE_ENV=production
 
-# Build the Angular application using npx
-RUN npx ng build
+# Build the Angular application for production
+RUN npx ng build --configuration production
 
 # Stage 2: Build Spring Boot Backend
 FROM maven:3.9-eclipse-temurin-17 AS backend-build
