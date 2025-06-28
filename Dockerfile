@@ -3,22 +3,23 @@
 FROM node:18-alpine AS frontend-build
 
 # Set working directory
-WORKDIR /app/portfolio-app
+WORKDIR /app
 
-# Debug: Show initial directory state
-RUN pwd && ls -la
-
-# Copy package files first for layer caching
-COPY frontend/portfolio-app/package*.json ./
+# Copy the entire frontend directory
+COPY frontend/ ./frontend/
 
 # Debug: Show what was copied
-RUN echo "=== AFTER COPYING PACKAGE FILES ===" && pwd && ls -la
+RUN echo "=== FRONTEND DIRECTORY CONTENTS ===" && ls -la frontend/
+RUN echo "=== PORTFOLIO-APP DIRECTORY CONTENTS ===" && ls -la frontend/portfolio-app/
+
+# Navigate to the portfolio-app directory
+WORKDIR /app/frontend/portfolio-app
+
+# Debug: Show we're in the right place
+RUN pwd && ls -la
 
 # Install dependencies (this will install Angular 18.2.0 as specified in package.json)
 RUN npm install
-
-# Now copy the rest of the source code
-COPY frontend/portfolio-app/ .
 
 # Debug: Show the exact Angular CLI version being used
 RUN npx ng version
@@ -59,7 +60,7 @@ WORKDIR /app
 COPY --from=backend-build /app/backend/target/*.jar app.jar
 
 # Copy the built frontend from frontend build stage
-COPY --from=frontend-build /app/portfolio-app/dist/portfolio-app/browser ./static
+COPY --from=frontend-build /app/frontend/portfolio-app/dist/portfolio-app/browser ./static
 
 # Create a non-root user
 RUN addgroup -g 1001 -S appgroup && \
