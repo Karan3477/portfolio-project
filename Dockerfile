@@ -11,8 +11,14 @@ COPY frontend/ ./frontend/
 # Navigate to the portfolio-app directory
 WORKDIR /app/frontend/portfolio-app
 
+# Debug: Show the package.json content
+RUN echo "=== PACKAGE.JSON CONTENT ===" && cat package.json
+
 # Install dependencies (this will install Angular 18.2.0 as specified in package.json)
 RUN npm install
+
+# Debug: Show available scripts
+RUN echo "=== AVAILABLE SCRIPTS ===" && npm run
 
 # Increase memory for the build and set production mode
 ENV NODE_OPTIONS=--max-old-space-size=4096
