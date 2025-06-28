@@ -8,21 +8,21 @@ WORKDIR /app/portfolio-app
 # Copy package files first for layer caching
 COPY frontend/portfolio-app/package*.json ./
 
-# Install dependencies
+# Install dependencies (this will install Angular 18.2.0 as specified in package.json)
 RUN npm install
 
 # Now copy the rest of the source code
 COPY frontend/portfolio-app/ .
 
-# Debug: Show Angular CLI version and available scripts
+# Debug: Show the exact Angular CLI version being used
 RUN npx ng version
-RUN npm run
+RUN echo "Available scripts:" && npm run
 
 # Increase memory for the build and set production mode
 ENV NODE_OPTIONS=--max-old-space-size=4096
 ENV NODE_ENV=production
 
-# Build the Angular application for production
+# Build the Angular application using the project's Angular CLI version
 RUN npx ng build --configuration production
 
 # Stage 2: Build Spring Boot Backend
