@@ -2,9 +2,9 @@
 # Stage 1: Build Angular Frontend
 FROM node:18-alpine AS frontend-build
 
-WORKDIR /app/frontend
+WORKDIR /app/frontend/portfolio-app
 
-# Copy package files
+# Copy the entire portfolio-app directory
 COPY frontend/portfolio-app/ .
 
 # Increase memory for the build
@@ -44,7 +44,7 @@ WORKDIR /app
 COPY --from=backend-build /app/backend/target/*.jar app.jar
 
 # Copy the built frontend from frontend build stage
-COPY --from=frontend-build /app/frontend/dist/portfolio-app/browser ./static
+COPY --from=frontend-build /app/frontend/portfolio-app/dist/portfolio-app/browser ./static
 
 # Create a non-root user
 RUN addgroup -g 1001 -S appgroup && \
