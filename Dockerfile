@@ -8,21 +8,11 @@ WORKDIR /app
 # Copy the entire frontend directory
 COPY frontend/ ./frontend/
 
-# Debug: Show what was copied
-RUN echo "=== FRONTEND DIRECTORY CONTENTS ===" && ls -la frontend/
-RUN echo "=== PORTFOLIO-APP DIRECTORY CONTENTS ===" && ls -la frontend/portfolio-app/
-
 # Navigate to the portfolio-app directory
 WORKDIR /app/frontend/portfolio-app
 
-# Debug: Show we're in the right place
-RUN pwd && ls -la
-
 # Install dependencies (this will install Angular 18.2.0 as specified in package.json)
 RUN npm install
-
-# Show available scripts for debugging
-RUN echo "Available scripts:" && npm run
 
 # Increase memory for the build and set production mode
 ENV NODE_OPTIONS=--max-old-space-size=4096
@@ -79,4 +69,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:9000/actuator/health || exit 1
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"] 
+ENTRYPOINT ["java", "-jar", "app.jar"]
