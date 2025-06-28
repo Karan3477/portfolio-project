@@ -11,6 +11,9 @@ COPY frontend/ ./frontend/
 # Navigate to the portfolio-app directory
 WORKDIR /app/frontend/portfolio-app
 
+# Debug: Show current directory and list files
+RUN echo "=== CURRENT DIRECTORY ===" && pwd && ls -la
+
 # Debug: Show the package.json content
 RUN echo "=== PACKAGE.JSON CONTENT ===" && cat package.json
 
