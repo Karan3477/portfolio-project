@@ -45,7 +45,6 @@ INSERT INTO skills (name, category, icon, description, color) VALUES
 
 -- Tools Skills
 ('Git', 'tools', 'fab fa-git-alt', 'Version control system', '#F05032'),
-('Docker', 'tools', 'fab fa-docker', 'Containerization platform', '#2496ED'),
 ('AWS', 'tools', 'fab fa-aws', 'Cloud computing platform', '#FF9900'),
 ('Jenkins', 'tools', 'fas fa-cogs', 'Continuous integration tool', '#D24939'),
 

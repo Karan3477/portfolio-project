@@ -1,14 +1,14 @@
 services:
   - type: web
     name: portfolio-app
-    env: docker
+    env: java
     plan: starter
     region: oregon
-    buildCommand: docker build -t portfolio-app .
-    startCommand: docker run -p $PORT:9000 portfolio-app
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: docker
+        value: production
       - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: portfolio-db
